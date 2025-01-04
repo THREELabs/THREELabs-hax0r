@@ -251,6 +251,8 @@ class PasswordCracker {
             hintElement.textContent = this.currentHint + "\nHint: Contains both letters and numbers";
         } else if (this.attempts === 3) {
             hintElement.textContent = this.currentHint + "\nHint: Length is " + this.password.length + " characters";
+        } else if (this.attempts === 4) {
+            hintElement.textContent = this.currentHint + "\nHint: The password is " + this.password;
         }
     }
 }
@@ -354,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Password cracking puzzle
     async function checkPassword(event) {
+        event.preventDefault();
         const password = document.getElementById('passwordInput').value;
         if (event && event.shiftKey) {
             proceedToNextPuzzle('puzzle1', 'puzzle2');
