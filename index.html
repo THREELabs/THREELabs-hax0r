@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Intrusion: Shadow Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div id="game-container">
+        <!-- Game Header -->
+        <div class="game-header">
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="tools-panel">
+                <div class="tool-item" data-tool="scan">Network Scanner</div>
+                <div class="tool-item" data-tool="decrypt">Decryptor</div>
+                <div class="tool-item" data-tool="exploit">Exploit Kit</div>
+            </div>
+        </div>
+
+        <!-- Terminal Interface -->
+        <div id="terminal-container">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="terminal-button red"></span>
+                    <span class="terminal-button yellow"></span>
+                    <span class="terminal-button green"></span>
+                </div>
+                <div id="terminal-content" class="terminal-body"></div>
+            </div>
+            <button id="start-button" class="action-button">Initialize System</button>
+        </div>
+
+        <!-- Level 1: System Breach -->
+        <div id="level1" class="hidden">
+            <!-- Password Cracking Interface -->
+            <div id="puzzle1" class="puzzle-container">
+                <h2>System Access</h2>
+                <div class="status-message">
+                    <p>Security Level: High</p>
+                    <p>Authentication Required</p>
+                </div>
+                <div class="password-interface">
+                    <div class="password-hints">
+                        <p>Analyzing security patterns...</p>
+                        <ul class="hint-list"></ul>
+                    </div>
+                    <div class="password-input-container">
+                        <input type="password" id="passwordInput" placeholder="Enter system password">
+                        <button class="hack-button" onclick="checkPassword(event)">Execute Hack</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Visualization -->
+            <div id="puzzle2" class="puzzle-container hidden">
+                <h2>Network Infrastructure</h2>
+                <div class="network-container">
+                    <!-- Network nodes will be dynamically added here -->
+                </div>
+                <div class="network-tools">
+                    <button class="tool-button" data-tool="trace">Trace Route</button>
+                    <button class="tool-button" data-tool="scan">Port Scan</button>
+                    <button class="hack-button" onclick="solvePuzzle2(event)">Execute Bypass</button>
+                </div>
+            </div>
+
+            <!-- File Decryption -->
+            <div id="puzzle3" class="puzzle-container hidden">
+                <h2>Encrypted Data</h2>
+                <div class="terminal">
+                    <div class="encrypted-content">
+                        <p class="encrypted-text">Gur dhvpx oebja sbk whzcf bire gur ynml qbt.</p>
+                        <div class="decryption-tools">
+                            <select id="cipher-type">
+                                <option value="caesar">Caesar Cipher</option>
+                                <option value="vigenere">Vigenère Cipher</option>
+                                <option value="xor">XOR Encryption</option>
+                            </select>
+                            <input type="text" id="decryption-key" placeholder="Enter key">
+                            <input type="text" id="decryptedInput" placeholder="Decrypted output">
+                            <button class="hack-button" onclick="checkDecryption(event)">Decrypt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level 2: Core System -->
+        <div id="level2" class="hidden">
+            <!-- AI Bypass Interface -->
+            <div id="puzzle4" class="puzzle-container">
+                <h2>AI Defense System</h2>
+                <div class="ai-interface">
+                    <div class="ai-visualization"></div>
+                    <div class="command-terminal">
+                        <div class="command-history"></div>
+                        <div class="command-input-container">
+                            <input type="text" class="command-input" placeholder="Enter command">
+                            <button class="hack-button" onclick="solvePuzzle4(event)">Execute Command</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Access -->
+            <div id="puzzle5" class="puzzle-container hidden">
+                <h2>Core Security</h2>
+                <div class="security-grid">
+                    <div class="grid-container"></div>
+                    <div class="security-tools">
+                        <button class="tool-button" data-tool="analyze">Analyze Pattern</button>
+                        <button class="tool-button" data-tool="bypass">Execute Bypass</button>
+                        <button class="hack-button" onclick="solvePuzzle5(event)">Override Security</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Challenge -->
+            <div id="puzzle6" class="puzzle-container hidden">
+                <h2>System Override</h2>
+                <div class="override-interface">
+                    <div class="code-editor">
+                        <textarea id="codeInput" class="code-area" placeholder="Enter override sequence"></textarea>
+                        <button class="hack-button" onclick="solvePuzzle6(event)">Execute Override</button>
+                    </div>
+                    <div class="system-status">
+                        <div class="status-indicator"></div>
+                        <div id="timer" class="countdown">Time remaining: 60 seconds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Results -->
+        <div class="results-container">
+            <!-- Leaderboard -->
+            <div id="leaderboard" class="hidden">
+                <h2>Top Operatives</h2>
+                <div class="leaderboard-content">
+                    <table class="scores-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Agent</th>
+                                <th>Score</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Mission Results -->
+            <div id="ending1" class="hidden result-screen success">
+                <h2>Mission Accomplished</h2>
+                <div class="result-details">
+                    <p>Erebus system successfully disabled</p>
+                    <p>NovaCorp security breached</p>
+                    <p>Data extracted: 100%</p>
+                    <div class="mission-stats">
+                        <p>Time: <span class="stat-value">00:00</span></p>
+                        <p>Score: <span class="stat-value">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ending2" class="hidden result-screen failure">
+                <h2>Mission Failed</h2>
+                <div class="result-details">
+                    <p>Security protocols detected</p>
+                    <p>System lockdown initiated</p>
+                    <p>Trace program: Active</p>
+                    <div class="mission-stats">
+                        <p>Survival Time: <span class="stat-value">00:00</span></p>
+                        <p>Progress: <span class="stat-value">0%</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
