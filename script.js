@@ -35,6 +35,18 @@ class GameState {
             this.unlockedSkills = new Set(data.unlockedSkills);
         }
     }
+
+    updateUI() {
+        const progressBar = document.querySelector('.progress-bar');
+        progressBar.style.width = `${this.progress}%`;
+    }
+
+    updateProgress(value) {
+        this.progress = Math.min(100, Math.max(0, value));
+        console.log('updateProgress called with value:', value);
+        this.updateUI();
+        this.saveState();
+    }
 }
 
 // Sound Effects Manager
@@ -112,6 +124,7 @@ class NetworkGraph {
         this.nodes = [];
         this.edges = [];
         this.selectedNodes = new Set();
+        this.onSelectionChange = null;
     }
 
     addNode(x, y) {
@@ -119,12 +132,12 @@ class NetworkGraph {
         node.className = 'node';
         node.style.left = `${x}px`;
         node.style.top = `${y}px`;
-        
+
         node.addEventListener('click', () => this.handleNodeClick(this.nodes.length));
-        
+
         this.container.appendChild(node);
         this.nodes.push(node);
-        
+
         return this.nodes.length - 1;
     }
 
@@ -262,7 +275,26 @@ document.addEventListener('DOMContentLoaded', () => {
         
         document.getElementById('terminal-container').classList.add('hidden');
         document.getElementById('level1').classList.remove('hidden');
+        console.log('startGame: calling updateProgress(0)');
         gameState.updateProgress(0);
+        startTimer();
+    }
+
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        
+        const intervalId = setInterval(() => {
+            gameState.timeRemaining--;
+            timerElement.textContent = `Time remaining: ${gameState.timeRemaining} seconds`;
+            
+            if (gameState.timeRemaining <= 0) {
+                clearInterval(intervalId);
+                // Game over
+                document.getElementById('level2').classList.add('hidden');
+                document.getElementById('game-complete').classList.add('hidden');
+                document.getElementById('ending2').classList.remove('hidden');
+            }
+        }, 1000);
     }
 
     // Event Listeners
@@ -278,8 +310,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const result = await passwordCracker.start('dataispower1234', 'NovaCorp CEO\'s favorite phrase + Employee ID');
         if (result) {
-            proceedToNextPuzzle('puzzle1', 'puzzle2');
+            console.log('checkPassword: calling updateProgress(33)');
             gameState.updateProgress(33);
+            completePuzzle();
+            proceedToNextPuzzle('puzzle1', 'puzzle2');
         }
     }
 
@@ -299,6 +333,63 @@ document.addEventListener('DOMContentLoaded', () => {
         networkGraph.addEdge(1, 3);
         networkGraph.addEdge(3, 4);
         networkGraph.addEdge(3, 5);
+    }
+
+    // Helper functions
+    function proceedToNextPuzzle(currentId, nextId) {
+        document.getElementById(currentId).classList.add('hidden');
+        document.getElementById(nextId).classList.remove('hidden');
+        soundManager.play('success');
+    }
+
+    // Network puzzle
+    function initializeNetwork() {
+        // Create network nodes
+        const nodePositions = [
+            {x: 50, y: 50}, {x: 150, y: 100}, {x: 250, y: 50},
+            {x: 150, y: 200}, {x: 50, y: 250}, {x: 250, y: 250}
+        ];
+
+        nodePositions.forEach(pos => networkGraph.addNode(pos.x, pos.y));
+        
+        // Add connections
+        networkGraph.addEdge(0, 1);
+        networkGraph.addEdge(1, 2);
+        networkGraph.addEdge(1, 3);
+        networkGraph.addEdge(3, 4);
+        networkGraph.addEdge(3, 5);
+
+        networkGraph.onSelectionChange = checkNetworkSolution;
+    }
+
+    function checkNetworkSolution(selectedNodes) {
+        const correctNodes = [1, 3, 5];
+        const isCorrect = correctNodes.every(node => selectedNodes.includes(node));
+        
+        if (isCorrect && selectedNodes.length === correctNodes.length) {
+            console.log('checkNetworkSolution: calling updateProgress(66)');
+            gameState.updateProgress(66);
+            completePuzzle();
+            nextLevel();
+            proceedToNextPuzzle('puzzle2', 'level2');
+        }
+    }
+
+    function completePuzzle() {
+        gameState.score += 100 * gameState.currentLevel;
+        gameState.inventory.add(`level${gameState.currentLevel}-item`);
+        console.log('completePuzzle: score:', gameState.score, 'inventory:', gameState.inventory);
+    }
+
+    function nextLevel() {
+        gameState.currentLevel++;
+        if (gameState.currentLevel > gameState.maxLevels) {
+            console.log('nextLevel: calling updateProgress(100)');
+            gameState.updateProgress(100);
+            // Game completed
+            document.getElementById('level2').classList.add('hidden');
+            document.getElementById('game-complete').classList.remove('hidden');
+        }
     }
 
     // Helper functions

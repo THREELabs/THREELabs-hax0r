@@ -91,48 +91,8 @@
 
         <!-- Level 2: Core System -->
         <div id="level2" class="hidden">
-            <!-- AI Bypass Interface -->
-            <div id="puzzle4" class="puzzle-container">
-                <h2>AI Defense System</h2>
-                <div class="ai-interface">
-                    <div class="ai-visualization"></div>
-                    <div class="command-terminal">
-                        <div class="command-history"></div>
-                        <div class="command-input-container">
-                            <input type="text" class="command-input" placeholder="Enter command">
-                            <button class="hack-button" onclick="solvePuzzle4(event)">Execute Command</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Core Access -->
-            <div id="puzzle5" class="puzzle-container hidden">
-                <h2>Core Security</h2>
-                <div class="security-grid">
-                    <div class="grid-container"></div>
-                    <div class="security-tools">
-                        <button class="tool-button" data-tool="analyze">Analyze Pattern</button>
-                        <button class="tool-button" data-tool="bypass">Execute Bypass</button>
-                        <button class="hack-button" onclick="solvePuzzle5(event)">Override Security</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Final Challenge -->
-            <div id="puzzle6" class="puzzle-container hidden">
-                <h2>System Override</h2>
-                <div class="override-interface">
-                    <div class="code-editor">
-                        <textarea id="codeInput" class="code-area" placeholder="Enter override sequence"></textarea>
-                        <button class="hack-button" onclick="solvePuzzle6(event)">Execute Override</button>
-                    </div>
-                    <div class="system-status">
-                        <div class="status-indicator"></div>
-                        <div id="timer" class="countdown">Time remaining: 60 seconds</div>
-                    </div>
-                </div>
-            </div>
+            <h2>Final Level</h2>
+            <p>Congratulations, you've reached the final level. You've successfully infiltrated NovaCorp's systems. Your mission is complete.</p>
         </div>
 
         <!-- Game Results -->
@@ -181,6 +141,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="game-complete" class="hidden">
+            <h2>Game Complete</h2>
+            <p>Congratulations! You have completed the game.</p>
         </div>
     </div>
 
