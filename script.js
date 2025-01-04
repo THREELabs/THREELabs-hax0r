@@ -255,8 +255,60 @@ class PasswordCracker {
     }
 }
 
+// Matrix Rain Animation
+class MatrixRain {
+    constructor() {
+        this.canvas = document.getElementById('matrix-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.resizeCanvas();
+        this.characters = "01";
+        this.fontSize = 14;
+        this.columns = Math.floor(this.canvas.width / this.fontSize);
+        this.drops = new Array(this.columns).fill(1);
+        
+        window.addEventListener('resize', () => this.resizeCanvas());
+        this.animate();
+    }
+
+    resizeCanvas() {
+        requestAnimationFrame(() => {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.columns = Math.floor(this.canvas.width / this.fontSize);
+            this.drops = new Array(Math.max(1, this.columns)).fill(1);
+        });
+    }
+
+    animate() {
+        if (!this.canvas.width || !this.canvas.height) {
+            this.resizeCanvas();
+            requestAnimationFrame(() => this.animate());
+            return;
+        }
+
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.ctx.fillStyle = '#0F0';
+        this.ctx.font = this.fontSize + 'px monospace';
+        
+        for (let i = 0; i < this.drops.length; i++) {
+            const char = this.characters.charAt(Math.floor(Math.random() * this.characters.length));
+            this.ctx.fillText(char, i * this.fontSize, this.drops[i] * this.fontSize);
+            
+            if (this.drops[i] * this.fontSize > this.canvas.height && Math.random() > 0.975) {
+                this.drops[i] = 0;
+            }
+            this.drops[i]++;
+        }
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
 // Initialize game when document is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Matrix Rain
+    new MatrixRain();
     const gameState = new GameState();
     const terminal = new Terminal('terminal-content');
     const soundManager = new SoundManager();
@@ -308,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const result = await passwordCracker.start('dataispower1234', 'NovaCorp CEO\'s favorite phrase + Employee ID');
+        const result = await passwordCracker.start('N0v@C0rpS3cur3!', 'A complex alphanumeric password');
         if (result) {
             console.log('checkPassword: calling updateProgress(33)');
             gameState.updateProgress(33);
@@ -322,7 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create network nodes
         const nodePositions = [
             {x: 50, y: 50}, {x: 150, y: 100}, {x: 250, y: 50},
-            {x: 150, y: 200}, {x: 50, y: 250}, {x: 250, y: 250}
+            {x: 150, y: 200}, {x: 50, y: 250}, {x: 250, y: 250},
+            {x: 350, y: 100}, {x: 350, y: 200}, {x: 450, y: 150}
         ];
 
         nodePositions.forEach(pos => networkGraph.addNode(pos.x, pos.y));
@@ -333,6 +386,10 @@ document.addEventListener('DOMContentLoaded', () => {
         networkGraph.addEdge(1, 3);
         networkGraph.addEdge(3, 4);
         networkGraph.addEdge(3, 5);
+        networkGraph.addEdge(2, 6);
+        networkGraph.addEdge(5, 7);
+        networkGraph.addEdge(6, 8);
+        networkGraph.addEdge(7, 8);
     }
 
     // Helper functions
@@ -363,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkNetworkSolution(selectedNodes) {
-        const correctNodes = [1, 3, 5];
+        const correctNodes = [1, 3, 6, 8];
         const isCorrect = correctNodes.every(node => selectedNodes.includes(node));
         
         if (isCorrect && selectedNodes.length === correctNodes.length) {

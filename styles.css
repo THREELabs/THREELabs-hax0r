@@ -8,7 +8,7 @@
 }
 
 body {
-    background: linear-gradient(to bottom, var(--dark-green), var(--terminal-black));
+    background: #000;
     color: var(--neon-green);
     text-shadow: 0 0 5px var(--neon-green);
     font-family: 'Courier New', Courier, monospace;
@@ -18,11 +18,8 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-size: 100% 200%;
-    animation: matrixScroll 10s linear infinite;
     position: relative;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 /* Matrix Rain Canvas */
